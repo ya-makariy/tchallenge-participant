@@ -1,0 +1,18 @@
+replicaCount: 1
+
+image:
+  repository: yamakariy/tchallenge-participant
+  pullPolicy: Always
+  restartPolicy: Always
+  app: frontend
+  containerPort: 4200
+
+service:
+  name: "4200"
+  type: ClusterIP
+  port: 4200
+  targetPort: 4200
+
+route:
+  host: frontend.openshift.devops.t-systems.ru
+  path: /

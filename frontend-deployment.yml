@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: yamakariy/tchallenge-participant:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4200
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: frontend
+  name: frontend
+spec:
+  ports:
+  - name: "4200"
+    port: 4200
+    targetPort: 4200
+  selector:
+    app: frontend
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Route
+metadata:
+  labels:
+    app: frontend
+  name: route-frontend
+spec:
+  host: frontend.openshift.devops.t-systems.ru
+  path: /
+  to:
+    kind: Service
+    name: frontend
